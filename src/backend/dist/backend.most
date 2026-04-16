@@ -1,0 +1,174 @@
+// Version: 1.0.0
+type AddressId__345838458 = Nat;
+type CartItem__962422454 =
+  {
+    customizations : [SelectedCustomization__415865502];
+    menuItemId : MenuItemId__18119667;
+    menuItemName : Text;
+    quantity : Nat;
+    specialInstructions : Text;
+    unitPriceCents : Nat
+  };
+type Cuisine__333544078 = Text;
+type CustomizationGroup__105229558 =
+  {
+    maxSelections : Nat;
+    name : Text;
+    options : [CustomizationOption__220617098];
+    required : Bool
+  };
+type CustomizationOption__220617098 = {name : Text; priceModifierCents : Int};
+type Data__791452850<K, V> =
+  {var count : Nat__490723111; kvs : [var ?(K, V)]};
+type DeliveryAddressSnapshot__608552341 =
+  {city : Text; state : Text; street : Text; zipCode : Text};
+type DeliveryAddress__273114296 =
+  {
+    addressLabel : Text;
+    city : Text;
+    id : AddressId__345838458;
+    isDefault : Bool;
+    state : Text;
+    street : Text;
+    zipCode : Text
+  };
+type Internal__8484328<K, V> =
+  {children : [var ?Node__46230540<K, V>]; data : Data__791452850<K, V>};
+type Leaf__809889148<K, V> = {data : Data__791452850<K, V>};
+type List__415060402<T> = List__790383201<T>;
+type List__790383201<T> =
+  {
+    var blockIndex : Nat__490723111;
+    var blocks : [var [var ?T]];
+    var elementIndex : Nat__490723111
+  };
+type Map__158565046<K, V> = Map__297112838<K, V>;
+type Map__297112838<K, V> =
+  {var root : Node__46230540<K, V>; var size : Nat__490723111};
+type Map__605269027<K, V> = Map__158565046<K, V>;
+type MenuItemId__18119667 = Nat;
+type MenuItem__243732802 =
+  {
+    category : Text;
+    customizations : [CustomizationGroup__105229558];
+    description : Text;
+    id : MenuItemId__18119667;
+    imageUrl : Text;
+    isAvailable : Bool;
+    name : Text;
+    priceCents : Nat;
+    restaurantId : RestaurantId__389023155
+  };
+type Nat__490723111 = Nat__920180692;
+type Nat__920180692 = Nat;
+type Node__46230540<K, V> =
+  {#internal : Internal__8484328<K, V>; #leaf : Leaf__809889148<K, V>};
+type OrderId__197865225 = Nat;
+type OrderStatus__591380551 =
+  {
+    #beingPrepared;
+    #cancelled;
+    #confirmed;
+    #delivered;
+    #driverAssigned;
+    #inTransit;
+    #readyForPickup
+  };
+type Order__720360493 =
+  {
+    createdAt : Timestamp__301639476;
+    customerId : UserId__158757552;
+    deliveryAddress : DeliveryAddressSnapshot__608552341;
+    deliveryFeeCents : Nat;
+    estimatedDeliveryTime : Timestamp__301639476;
+    id : OrderId__197865225;
+    items : [CartItem__962422454];
+    restaurantId : RestaurantId__389023155;
+    restaurantName : Text;
+    status : OrderStatus__591380551;
+    stripeSessionId : Text;
+    subtotalCents : Nat;
+    taxCents : Nat;
+    totalCents : Nat;
+    updatedAt : Timestamp__301639476
+  };
+type RestaurantId__389023155 = Nat;
+type Restaurant__761304188 =
+  {
+    cuisine : Cuisine__333544078;
+    deliveryFeecents : Nat;
+    deliveryTimeMinutes : Nat;
+    id : RestaurantId__389023155;
+    imageUrl : Text;
+    isOpen : Bool;
+    name : Text;
+    rating : Float
+  };
+type SelectedCustomization__415865502 =
+  {groupName : Text; priceModifierCents : Int; selectedOption : Text};
+type StripeConfiguration__96897619 =
+  {allowedCountries : [Text]; secretKey : Text};
+type Timestamp__301639476 = Int;
+type UserId__158757552 = Principal;
+type UserProfile__1009003526 = {email : Text; name : Text; phone : Text};
+type UserRole__1054455867 = {#admin; #guest; #user};
+actor {
+  stable accessControlState :
+    {
+      var adminAssigned : Bool;
+      userRoles : Map__605269027<Principal, UserRole__1054455867>
+    };
+  stable menuItems :
+    {
+      var root : Node__46230540<MenuItemId__18119667, MenuItem__243732802>;
+      var size : Nat__490723111
+    };
+  stable nextAddressId :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?AddressId__345838458]];
+      var elementIndex : Nat__490723111
+    };
+  stable nextMenuItemId :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?MenuItemId__18119667]];
+      var elementIndex : Nat__490723111
+    };
+  stable nextOrderId :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?OrderId__197865225]];
+      var elementIndex : Nat__490723111
+    };
+  stable nextRestaurantId :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?RestaurantId__389023155]];
+      var elementIndex : Nat__490723111
+    };
+  stable orders :
+    {
+      var root : Node__46230540<OrderId__197865225, Order__720360493>;
+      var size : Nat__490723111
+    };
+  stable restaurants :
+    {
+      var root :
+        Node__46230540<RestaurantId__389023155, Restaurant__761304188>;
+      var size : Nat__490723111
+    };
+  stable var stripeConfiguration : ?StripeConfiguration__96897619;
+  stable userAddresses :
+    {
+      var root :
+        Node__46230540<UserId__158757552,
+                        List__415060402<DeliveryAddress__273114296>>;
+      var size : Nat__490723111
+    };
+  stable userProfiles :
+    {
+      var root : Node__46230540<UserId__158757552, UserProfile__1009003526>;
+      var size : Nat__490723111
+    }
+};

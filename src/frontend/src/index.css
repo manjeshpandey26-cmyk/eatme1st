@@ -1,0 +1,232 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --font-display: "Bricolage Grotesque", sans-serif;
+    --font-body: "DM Sans", sans-serif;
+    --font-mono: "Geist Mono", monospace;
+    --radius: 0.5rem;
+
+    --background: 0.99 0 0;
+    --foreground: 0.18 0 0;
+    --card: 1.0 0 0;
+    --card-foreground: 0.18 0 0;
+    --popover: 0.98 0 0;
+    --popover-foreground: 0.18 0 0;
+
+    --primary: 0.62 0.23 40;
+    --primary-foreground: 0.98 0 0;
+
+    --secondary: 0.25 0 0;
+    --secondary-foreground: 0.95 0 0;
+    --muted: 0.92 0 0;
+    --muted-foreground: 0.45 0 0;
+
+    --accent: 0.68 0.25 35;
+    --accent-foreground: 0.98 0 0;
+
+    --destructive: 0.55 0.24 25;
+    --destructive-foreground: 0.98 0 0;
+
+    --border: 0.88 0 0;
+    --input: 0.92 0 0;
+    --ring: 0.62 0.23 40;
+
+    --chart-1: 0.62 0.23 40;
+    --chart-2: 0.68 0.22 120;
+    --chart-3: 0.5 0.18 85;
+    --chart-4: 0.65 0.2 280;
+    --chart-5: 0.58 0.21 180;
+
+    --sidebar: 0.98 0 0;
+    --sidebar-foreground: 0.18 0 0;
+    --sidebar-primary: 0.62 0.23 40;
+    --sidebar-primary-foreground: 0.98 0 0;
+    --sidebar-accent: 0.92 0 0;
+    --sidebar-accent-foreground: 0.25 0 0;
+    --sidebar-border: 0.88 0 0;
+    --sidebar-ring: 0.62 0.23 40;
+  }
+
+  .dark {
+    --background: 0.14 0 0;
+    --foreground: 0.96 0 0;
+    --card: 0.22 0 0;
+    --card-foreground: 0.96 0 0;
+    --popover: 0.28 0 0;
+    --popover-foreground: 0.96 0 0;
+
+    --primary: 0.68 0.25 35;
+    --primary-foreground: 0.14 0 0;
+
+    --secondary: 0.85 0 0;
+    --secondary-foreground: 0.18 0 0;
+    --muted: 0.28 0 0;
+    --muted-foreground: 0.55 0 0;
+
+    --accent: 0.72 0.24 32;
+    --accent-foreground: 0.14 0 0;
+
+    --destructive: 0.65 0.22 25;
+    --destructive-foreground: 0.14 0 0;
+
+    --border: 0.32 0 0;
+    --input: 0.32 0 0;
+    --ring: 0.68 0.25 35;
+
+    --chart-1: 0.68 0.25 35;
+    --chart-2: 0.72 0.24 120;
+    --chart-3: 0.65 0.22 85;
+    --chart-4: 0.7 0.23 280;
+    --chart-5: 0.68 0.24 180;
+
+    --sidebar: 0.22 0 0;
+    --sidebar-foreground: 0.96 0 0;
+    --sidebar-primary: 0.68 0.25 35;
+    --sidebar-primary-foreground: 0.14 0 0;
+    --sidebar-accent: 0.28 0 0;
+    --sidebar-accent-foreground: 0.85 0 0;
+    --sidebar-border: 0.32 0 0;
+    --sidebar-ring: 0.68 0.25 35;
+  }
+
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-body antialiased;
+  }
+}
+
+@layer utilities {
+  @font-face {
+    font-family: "Bricolage Grotesque";
+    src: url("/assets/fonts/BricolageGrotesque.woff2") format("woff2");
+    font-weight: 400 900;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: "DM Sans";
+    src: url("/assets/fonts/DMSans.woff2") format("woff2");
+    font-weight: 400 700;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: "Geist Mono";
+    src: url("/assets/fonts/GeistMono.woff2") format("woff2");
+    font-weight: 400 700;
+    font-display: swap;
+  }
+
+  .transition-smooth {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .hero-banner-bg {
+    background: linear-gradient(
+      135deg,
+      oklch(var(--secondary) / 1) 0%,
+      oklch(var(--foreground) / 0.85) 100%
+    );
+  }
+
+  .badge-status-confirmed {
+    @apply inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium rounded-full;
+    background: oklch(var(--primary) / 0.12);
+    color: oklch(var(--primary));
+    border: 1px solid oklch(var(--primary) / 0.3);
+  }
+
+  .badge-status-preparing {
+    @apply inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium rounded-full;
+    background: oklch(var(--accent) / 0.12);
+    color: oklch(var(--accent));
+    border: 1px solid oklch(var(--accent) / 0.3);
+  }
+
+  .badge-status-ready {
+    @apply inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium rounded-full;
+    background: oklch(0.62 0.18 145 / 0.12);
+    color: oklch(0.45 0.18 145);
+    border: 1px solid oklch(0.62 0.18 145 / 0.3);
+  }
+
+  .badge-status-intransit {
+    @apply inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium rounded-full;
+    background: oklch(var(--primary) / 0.08);
+    color: oklch(var(--primary) / 0.9);
+    border: 1px solid oklch(var(--primary) / 0.2);
+  }
+
+  .badge-status-delivered {
+    @apply inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium rounded-full;
+    background: oklch(0.62 0.18 145 / 0.15);
+    color: oklch(0.4 0.18 145);
+    border: 1px solid oklch(0.62 0.18 145 / 0.35);
+  }
+
+  .shadow-card {
+    @apply shadow-sm;
+  }
+
+  .shadow-elevated {
+    @apply shadow-md;
+  }
+
+  .shadow-subtle {
+    box-shadow: 0 1px 3px oklch(0 0 0 / 0.06), 0 1px 2px oklch(0 0 0 / 0.04);
+  }
+
+  /* Restaurant card hover */
+  .restaurant-card {
+    @apply bg-card rounded-2xl overflow-hidden border border-border transition-all duration-200;
+  }
+  .restaurant-card:hover {
+    @apply shadow-elevated -translate-y-0.5;
+  }
+
+  /* Food image */
+  .food-image {
+    @apply w-full object-cover;
+  }
+
+  /* Animated entrance */
+  @keyframes fade-in-up {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-in-up {
+    animation: fade-in-up 0.4s cubic-bezier(0.4, 0, 0.2, 1) both;
+  }
+
+  /* Stagger delays */
+  .delay-100 {
+    animation-delay: 0.1s;
+  }
+  .delay-200 {
+    animation-delay: 0.2s;
+  }
+  .delay-300 {
+    animation-delay: 0.3s;
+  }
+
+  /* Pill nav */
+  .nav-pill-active {
+    @apply text-primary font-semibold relative;
+  }
+  .nav-pill-active::after {
+    content: "";
+    @apply absolute bottom-0 left-0 right-0 h-0.5 bg-primary rounded-full;
+  }
+}

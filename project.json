@@ -1,0 +1,24 @@
+{
+  "overview": "Eatme1st is a customer-facing food delivery app with restaurant browsing, menu ordering, Stripe payment integration, and real-time order status tracking.",
+  "features": [
+    "Restaurant & menu browsing with search and filters",
+    "Cart with item customization, quantity, and totals",
+    "Stripe checkout for secure payment",
+    "Real-time order status tracking with delivery timeline",
+    "Saved delivery addresses",
+    "Order history with reorder capability",
+    "Internet Identity login",
+    "Sample restaurant and menu data"
+  ],
+  "category": "productivity",
+  "tags": [
+    "food-delivery",
+    "ordering",
+    "payment",
+    "tracking",
+    "restaurant",
+    "stripe",
+    "ecommerce"
+  ],
+  "last_updated": "2026-04-16T12:01:26.570Z"
+}

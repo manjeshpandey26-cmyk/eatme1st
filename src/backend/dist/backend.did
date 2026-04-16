@@ -1,0 +1,207 @@
+type http_request_result = 
+ record {
+   body: blob;
+   headers: vec http_header;
+   status: nat;
+ };
+type http_header = 
+ record {
+   name: text;
+   value: text;
+ };
+type UserRole = 
+ variant {
+   admin;
+   guest;
+   user;
+ };
+type UserProfile = 
+ record {
+   email: text;
+   name: text;
+   phone: text;
+ };
+type UserId = principal;
+type TransformationOutput = 
+ record {
+   body: blob;
+   headers: vec http_header;
+   status: nat;
+ };
+type TransformationInput = 
+ record {
+   context: blob;
+   response: http_request_result;
+ };
+type Timestamp = int;
+type StripeSessionStatus = 
+ variant {
+   completed: record {
+                response: text;
+                userPrincipal: opt text;
+              };
+   failed: record {error: text;};
+ };
+type StripeConfiguration = 
+ record {
+   allowedCountries: vec text;
+   secretKey: text;
+ };
+type ShoppingItem = 
+ record {
+   currency: text;
+   priceInCents: nat;
+   productDescription: text;
+   productName: text;
+   quantity: nat;
+ };
+type SelectedCustomization = 
+ record {
+   groupName: text;
+   priceModifierCents: int;
+   selectedOption: text;
+ };
+type RestaurantId = nat;
+type Restaurant = 
+ record {
+   cuisine: Cuisine;
+   deliveryFeecents: nat;
+   deliveryTimeMinutes: nat;
+   id: RestaurantId;
+   imageUrl: text;
+   isOpen: bool;
+   name: text;
+   rating: float64;
+ };
+type PlaceOrderInput = 
+ record {
+   deliveryAddressId: AddressId;
+   items: vec CartItemInput;
+   restaurantId: RestaurantId;
+ };
+type OrderStatus = 
+ variant {
+   beingPrepared;
+   cancelled;
+   confirmed;
+   delivered;
+   driverAssigned;
+   inTransit;
+   readyForPickup;
+ };
+type OrderId = nat;
+type Order = 
+ record {
+   createdAt: Timestamp;
+   customerId: UserId;
+   deliveryAddress: DeliveryAddressSnapshot;
+   deliveryFeeCents: nat;
+   estimatedDeliveryTime: Timestamp;
+   id: OrderId;
+   items: vec CartItem;
+   restaurantId: RestaurantId;
+   restaurantName: text;
+   status: OrderStatus;
+   stripeSessionId: text;
+   subtotalCents: nat;
+   taxCents: nat;
+   totalCents: nat;
+   updatedAt: Timestamp;
+ };
+type MenuItemId = nat;
+type MenuItem = 
+ record {
+   category: text;
+   customizations: vec CustomizationGroup;
+   description: text;
+   id: MenuItemId;
+   imageUrl: text;
+   isAvailable: bool;
+   name: text;
+   priceCents: nat;
+   restaurantId: RestaurantId;
+ };
+type DeliveryAddressSnapshot = 
+ record {
+   city: text;
+   state: text;
+   street: text;
+   zipCode: text;
+ };
+type DeliveryAddress = 
+ record {
+   addressLabel: text;
+   city: text;
+   id: AddressId;
+   isDefault: bool;
+   state: text;
+   street: text;
+   zipCode: text;
+ };
+type CustomizationOption = 
+ record {
+   name: text;
+   priceModifierCents: int;
+ };
+type CustomizationGroup = 
+ record {
+   maxSelections: nat;
+   name: text;
+   options: vec CustomizationOption;
+   required: bool;
+ };
+type Cuisine = text;
+type CartItemInput = 
+ record {
+   customizations: vec SelectedCustomization;
+   menuItemId: MenuItemId;
+   quantity: nat;
+   specialInstructions: text;
+ };
+type CartItem = 
+ record {
+   customizations: vec SelectedCustomization;
+   menuItemId: MenuItemId;
+   menuItemName: text;
+   quantity: nat;
+   specialInstructions: text;
+   unitPriceCents: nat;
+ };
+type AddressId = nat;
+service : {
+  _initializeAccessControl: () -> ();
+  addDeliveryAddress: (addressLabel: text, street: text, city: text, state:
+   text, zipCode: text) -> (DeliveryAddress);
+  assignCallerUserRole: (user: principal, role: UserRole) -> ();
+  confirmOrderPayment: (stripeSessionId: text) -> (opt Order);
+  createCheckoutSession: (items: vec ShoppingItem, successUrl: text,
+   cancelUrl: text) -> (text);
+  deleteDeliveryAddress: (addressId: AddressId) -> ();
+  deleteMenuItem: (id: MenuItemId) -> ();
+  deleteRestaurant: (id: RestaurantId) -> ();
+  filterRestaurants: (cuisine: opt text, minRating: opt float64,
+   maxDeliveryMinutes: opt nat) -> (vec Restaurant) query;
+  getCallerUserProfile: () -> (opt UserProfile) query;
+  getCallerUserRole: () -> (UserRole) query;
+  getDeliveryAddresses: () -> (vec DeliveryAddress) query;
+  getMenuItem: (id: MenuItemId) -> (opt MenuItem) query;
+  getMenuItems: (restaurantId: RestaurantId) -> (vec MenuItem) query;
+  getOrder: (orderId: OrderId) -> (opt Order) query;
+  getOrderHistory: () -> (vec Order) query;
+  getRestaurant: (id: RestaurantId) -> (opt Restaurant) query;
+  getStripeSessionStatus: (sessionId: text) -> (StripeSessionStatus);
+  getUserProfile: (user: UserId) -> (opt UserProfile) query;
+  isCallerAdmin: () -> (bool) query;
+  isStripeConfigured: () -> (bool) query;
+  listRestaurants: () -> (vec Restaurant) query;
+  placeOrder: (input: PlaceOrderInput, stripeSessionId: text) -> (Order);
+  saveCallerUserProfile: (profile: UserProfile) -> ();
+  searchRestaurants: (searchQuery: text) -> (vec Restaurant) query;
+  setDefaultDeliveryAddress: (addressId: AddressId) -> ();
+  setStripeConfiguration: (config: StripeConfiguration) -> ();
+  transform: (input: TransformationInput) -> (TransformationOutput) query;
+  updateDeliveryAddress: (address: DeliveryAddress) -> ();
+  updateOrderStatus: (orderId: OrderId, status: OrderStatus) -> ();
+  upsertMenuItem: (item: MenuItem) -> (MenuItem);
+  upsertRestaurant: (restaurant: Restaurant) -> (Restaurant);
+}
